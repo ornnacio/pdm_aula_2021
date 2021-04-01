@@ -7,16 +7,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  azulao: {
+  azul: {
     color: "blue",
     fontWeight: "bold",
     fontSize: 30,
-    textAlign: "left",
   },
-  vermelhinho: {
+  vermelho: {
     color: "red",
-    backgroundColor: "orange",
-    textAlign: "right",
+    fontWeight: "bold",
+    fontSize: 22,
   },
 });
 

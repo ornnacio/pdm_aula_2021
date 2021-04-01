@@ -1,52 +1,66 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { Text, View, Image, TextInput, Button } from "react-native";
+import { Text, View, Image, TextInput, Button, StyleSheet } from "react-native";
 
 import styles from "./estilo";
 
 const Carro = (props) => {
   return (
-    <View>
-      {console.log(props)}
-      <Text style={props.styleCarro}>Seu carro é {props.nome}!</Text>
+    <View style={[props.direcao]}>
+      <Text style={props.styleCarro}>Seu carro é {props.nome}</Text>
     </View>
   );
 };
 
-const mensagem = (props) => {
-  return alert("Teste " + props);
+const mensagem = (texto) => {
+  return alert("Sua mensagem: " + texto);
 };
 export default function App() {
   const [descricao, setDescricao] = useState("");
-
   return (
     <View style={styles.container}>
-      <Text>Hello world!</Text>
+      <Text style={styles.azul}>Hello world!</Text>
       <Image
         source={{ uri: "https://reactnative.dev/docs/assets/p_cat1.png" }}
         style={{ width: 200, height: 200 }}
       />
-      <Carro nome="Gol" styleCarro={styles.azulao} />
-      <Carro nome="Corsa" styleCarro={styles.vermelhinho} />
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: "gray",
-          borderWidth: 1,
-        }}
-        placeholder="Nome Qualquer"
-        onChangeText={(text) => setDescricao(text)}
-        //defaultValue="Nome qualquer"
+      <Carro
+        nome="Camaro"
+        styleCarro={{ backgroundColor: "gray", color: "yellow" }}
+        direcao={{ alignSelf: "flex-start" }}
       />
-      <Text style={{ color: "red", fontSize: 30 }}>{descricao}</Text>
-
-      <Button
-        title="Clique aqui"
-        onPress={() => {
-          mensagem(descricao);
+      <Carro
+        nome="Corsa"
+        styleCarro={{
+          backgroundColor: "orange",
+          color: "green",
         }}
-      ></Button>
+        direcao={{ alignSelf: "flex-end" }}
+      />
+      <TextInput
+        style={{ borderWidth: 1, height: 40, width: 200, borderColor: "gray" }}
+        placeholder="Nome"
+        onChangeText={(text) => setDescricao(text)}
+      />
+      <Text style={styles.vermelho}>{descricao}</Text>
+      <Text style={stylesScreen.textoDescricao}>
+        Descrição teste teste teste teste teste teste
+      </Text>
+      <Button
+        style={{ backgroundColor: "green" }}
+        title="Clique Aqui"
+        color="green"
+        onPress={() => mensagem(descricao)}
+      />
       <StatusBar style="auto" />
     </View>
   );
 }
+
+const stylesScreen = StyleSheet.create({
+  textoDescricao: {
+    backgroundColor: "#c8c8c8",
+    color: "orange",
+    fontSize: 22,
+  },
+});
