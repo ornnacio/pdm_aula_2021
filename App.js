@@ -15,10 +15,11 @@ const Stack = createStackNavigator();
 
 const theme = {
   ...DefaultTheme,
+  //  dark: true,
   colors: {
     ...DefaultTheme.colors,
-    primary: "red",
-    accent: "blue",
+    primary: "orange",
+    accent: "green",
   },
 };
 
