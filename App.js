@@ -1,20 +1,12 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { Text, View, Image, TextInput, StyleSheet } from "react-native";
-/* import Hello from "./screens/Hello";
-import Flex from "./Flex"; */
-import {
-  Avatar,
-  Button,
-  Card,
-  Title,
-  Paragraph,
-  Provider as PaperProvider,
-  DefaultTheme,
-} from "react-native-paper";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
+import InicioScreens from "./screens/InicioScreens";
+import ContatoForm from "./screens/ContatoForm";
+
+const Stack = createStackNavigator();
 
 const theme = {
   ...DefaultTheme,
@@ -28,24 +20,12 @@ const theme = {
 export default function App() {
   return (
     <PaperProvider theme={theme}>
-      <Card>
-        <Card.Title
-          title="Card Title"
-          subtitle="Card Subtitle"
-          left={LeftContent}
-        />
-        <Card.Content>
-          <Title>Card Vitoria</Title>
-          <Paragraph>Card content</Paragraph>
-        </Card.Content>
-        <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
-        <Card.Actions>
-          <Button>Cancel</Button>
-          <Button>
-            <Icon name="address-card" color="blue" size={24} /> Ok
-          </Button>
-        </Card.Actions>
-      </Card>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Início">
+          <Stack.Screen name="Início" component={InicioScreens} />
+          <Stack.Screen name="Formulário Contato" component={ContatoForm} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </PaperProvider>
   );
 }
