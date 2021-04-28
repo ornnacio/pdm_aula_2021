@@ -42,6 +42,13 @@ export default class ContatoForm extends React.Component {
     });
     console.log(this.state.contatoList);
   };
+  filtrar = () => {
+    let novoContato = this.state.contatoList.filter(
+      (item) => item.nome.length > 4
+    );
+
+    this.setState({ contatoList: novoContato });
+  };
 
   render() {
     return (
@@ -64,6 +71,10 @@ export default class ContatoForm extends React.Component {
 
         <Button mode="contained" onPress={() => this.getData()}>
           <Icon name="save"></Icon> Salvar
+        </Button>
+
+        <Button mode="contained" color="red" onPress={() => this.filtrar()}>
+          <Icon name="filter"></Icon> Filtrar
         </Button>
         <Card>
           <Card.Content>
