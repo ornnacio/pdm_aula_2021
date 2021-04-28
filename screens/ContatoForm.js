@@ -51,8 +51,17 @@ export default class ContatoForm extends React.Component {
   };
 
   render() {
+    const { route } = this.props;
+    const { key, nome } = route.params;
+    if (route.params) {
+      console.log(key);
+      console.log(nome);
+    }
     return (
       <>
+        <Title style={{ color: "red", textAlign: "center" }}>
+          Bem Vindo {nome ? nome : ""}
+        </Title>
         <TextInput
           label="Nome"
           value={this.state.nome}
@@ -76,6 +85,7 @@ export default class ContatoForm extends React.Component {
         <Button mode="contained" color="red" onPress={() => this.filtrar()}>
           <Icon name="filter"></Icon> Filtrar
         </Button>
+
         <Card>
           <Card.Content>
             <List.Section>

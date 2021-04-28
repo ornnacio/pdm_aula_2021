@@ -26,6 +26,14 @@ const theme = {
 };
 
 export default function App(props) {
+  /*  const { route } = this.props;
+
+  if (route.params) {
+    const { key, nome } = route.params;
+    console.log(key);
+    console.log(nome);
+  } */
+
   return (
     <>
       <Card>
@@ -48,7 +56,12 @@ export default function App(props) {
       </Card>
       <Button
         mode="contained"
-        onPress={() => props.navigation.navigate("Formulário Contato")}
+        onPress={() =>
+          props.navigation.navigate("Formulário Contato", {
+            key: 2,
+            nome: "Jackson",
+          })
+        }
       >
         <Icon name="user" color="white" size={24} /> Contato
       </Button>
