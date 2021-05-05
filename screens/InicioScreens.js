@@ -57,7 +57,7 @@ export default function App(props) {
       <Button
         mode="contained"
         onPress={() =>
-          props.navigation.navigate("Formulário Contato", {
+          props.navigation.navigate("Listagem de Contatos", {
             key: 2,
             nome: "Jackson",
           })

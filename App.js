@@ -10,6 +10,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import InicioScreens from "./screens/InicioScreens";
 import ContatoForm from "./screens/ContatoForm";
+import ContatoList from "./screens/ContatoList";
 
 const Stack = createStackNavigator();
 
@@ -78,6 +79,7 @@ export default function App() {
         >
           <Stack.Screen name="Início" component={InicioScreens} />
           <Stack.Screen name="Formulário Contato" component={ContatoForm} />
+          <Stack.Screen name="Listagem de Contatos" component={ContatoList} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

@@ -42,13 +42,6 @@ export default class ContatoForm extends React.Component {
     });
     console.log(this.state.contatoList);
   };
-  filtrar = () => {
-    let novoContato = this.state.contatoList.filter(
-      (item) => item.nome.length > 4
-    );
-
-    this.setState({ contatoList: novoContato });
-  };
 
   render() {
     const { route } = this.props;
@@ -82,27 +75,17 @@ export default class ContatoForm extends React.Component {
           <Icon name="save"></Icon> Salvar
         </Button>
 
-        <Button mode="contained" color="red" onPress={() => this.filtrar()}>
-          <Icon name="filter"></Icon> Filtrar
+        <Button
+          mode="contained"
+          color="green"
+          onPress={() =>
+            this.props.navigation.navigate("Listagem de Contatos", {
+              contatos: this.state.contatoList,
+            })
+          }
+        >
+          <Icon name="arrow-left"></Icon> Voltar
         </Button>
-
-        <Card>
-          <Card.Content>
-            <List.Section>
-              <List.Subheader>Listagem Contatos</List.Subheader>
-
-              {this.state.contatoList.map((item, i) => (
-                <>
-                  <Divider />
-                  <Title>{item.nome}</Title>
-                  <Paragraph>{item.telefone}</Paragraph>
-                  <Paragraph>{item.dataNascimento}</Paragraph>
-                  <Divider />
-                </>
-              ))}
-            </List.Section>
-          </Card.Content>
-        </Card>
       </>
     );
   }
