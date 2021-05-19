@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import {
   Card,
   Divider,
@@ -20,17 +20,18 @@ export default class ContatoList extends React.Component {
       contatoList: [],
     };
   }
-  componentDidMount() {
-    this.getData();
+  async componentDidMount() {
+    await this.getData();
   }
-  getData = () => {
+  getData = async () => {
     const { route } = this.props;
     if (route.params) {
       const { contatos } = route.params;
 
-      this.setState({ contatoList: contatos });
+      await this.setState({ contatoList: contatos });
     }
-
+    this.forceUpdate();
+    route.params = null;
     console.log(this.state.contatoList);
   };
 
@@ -40,6 +41,16 @@ export default class ContatoList extends React.Component {
     );
 
     this.setState({ contatoList: novoContato });
+  };
+
+  remover = (key) => {
+    let vetorContato = this.state.contatoList;
+
+    vetorContato.splice(key, 1);
+
+    alert("removendo..." + key);
+
+    this.forceUpdate();
   };
 
   render() {
@@ -59,11 +70,29 @@ export default class ContatoList extends React.Component {
 
               {this.state.contatoList?.map((item, i) => (
                 <>
-                  <Divider />
-                  <Title>{item.nome}</Title>
-                  <Paragraph>{item.telefone}</Paragraph>
-                  <Paragraph>{item.dataNascimento}</Paragraph>
-                  <Divider />
+                  <TouchableOpacity
+                    onLongPress={() => this.remover(i)}
+                    onPress={() => {
+                      let objContato = {
+                        id: i,
+                        nome: item.nome,
+                        telefone: item.telefone,
+                        dataNascimento: item.dataNascimento,
+                      };
+
+                      this.props.navigation.navigate("Formulário Contato", {
+                        contato: objContato,
+                        contatos: this.state.contatoList,
+                      });
+                    }}
+                  >
+                    <Divider />
+                    <Paragraph>{i + 1}</Paragraph>
+                    <Title>{item.nome}</Title>
+                    <Paragraph>{item.telefone}</Paragraph>
+                    <Paragraph>{item.dataNascimento}</Paragraph>
+                    <Divider />
+                  </TouchableOpacity>
                 </>
               ))}
             </List.Section>
@@ -77,6 +106,8 @@ export default class ContatoList extends React.Component {
             this.props.navigation.navigate("Formulário Contato", {
               key: "",
               nome: "Jackson",
+              contato: "",
+              contatos: this.state.contatoList,
             })
           }
         />

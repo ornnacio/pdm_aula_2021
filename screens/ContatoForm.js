@@ -15,24 +15,38 @@ export default class ContatoForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: null,
       nome: null,
       telefone: null,
       dataNascimento: null,
       contatoList: [],
     };
   }
-  componentDidMount() {
-    this.getData();
+  async componentDidMount() {
+    await this.carrregarDados();
   }
-  getData = () => {
+
+  salvar = async () => {
     let contato = {
+      id: this.state.id,
       nome: this.state.nome,
       telefone: this.state.telefone,
       dataNascimento: this.state.dataNascimento,
     };
+    let vetorContato = [...this.state.contatoList];
 
-    if (this.state.nome) {
-      this.setState({ contatoList: [...this.state.contatoList, contato] });
+    if (contato.id != null) {
+      vetorContato[contato.id].nome = this.state.nome;
+      vetorContato[contato.id].telefone = this.state.telefone;
+      vetorContato[contato.id].dataNascimento = this.state.dataNascimento;
+
+      await this.setState({ contatoList: vetorContato });
+    } else {
+      let vetTemp = [...vetorContato, contato];
+
+      await this.setState({
+        contatoList: vetTemp,
+      });
     }
 
     this.setState({
@@ -40,8 +54,32 @@ export default class ContatoForm extends React.Component {
       telefone: null,
       dataNascimento: null,
     });
-    console.log(this.state.contatoList);
+    await console.log(this.state.contatoList);
   };
+
+  carrregarDados() {
+    let { route } = this.props;
+
+    if (route.params) {
+      let { contato, contatos } = route.params;
+
+      if (contato.id != null) {
+        contatos.map((item, i) => {
+          if (i === contato.id) {
+            this.setState({
+              id: contato.id,
+              nome: contato.nome,
+              telefone: contato.telefone,
+              dataNascimento: contato.dataNascimento,
+            });
+          }
+        });
+      }
+      this.setState({ contatoList: contatos });
+      console.log(contatos);
+      console.log("teste rotas");
+    }
+  }
 
   render() {
     const { route } = this.props;
@@ -71,7 +109,7 @@ export default class ContatoForm extends React.Component {
           onChangeText={(text) => this.setState({ dataNascimento: text })}
         />
 
-        <Button mode="contained" onPress={() => this.getData()}>
+        <Button mode="contained" onPress={() => this.salvar()}>
           <Icon name="save"></Icon> Salvar
         </Button>
 
