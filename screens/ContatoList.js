@@ -1,132 +1,132 @@
 import * as React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import {
-  Card,
-  Divider,
-  TextInput,
-  Text,
-  Title,
-  Paragraph,
-  Button,
-  List,
-  FAB,
+    Card,
+    Divider,
+    TextInput,
+    Text,
+    Title,
+    Paragraph,
+    Button,
+    List,
+    FAB,
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class ContatoList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      contatoList: [],
-    };
-  }
-  async componentDidMount() {
-    await this.getData();
-  }
-  getData = async () => {
-    const { route } = this.props;
-    if (route.params) {
-      const { contatos } = route.params;
-
-      await this.setState({ contatoList: contatos });
+    constructor(props) {
+        super(props);
+        this.state = {
+            contatoList: [],
+        };
     }
-    this.forceUpdate();
-    route.params = null;
-    console.log(this.state.contatoList);
-  };
+    async componentDidMount() {
+        await this.getData();
+    }
+    getData = async () => {
+        const { route } = this.props;
+        if (route.params) {
+            const { contatos } = route.params;
 
-  filtrar = () => {
-    let novoContato = this.state.contatoList.filter(
-      (item) => item.nome.length > 4
-    );
+            await this.setState({ contatoList: contatos });
+        }
+        this.forceUpdate();
+        route.params = null;
+        console.log(this.state.contatoList);
+    };
 
-    this.setState({ contatoList: novoContato });
-  };
+    filtrar = () => {
+        let novoContato = this.state.contatoList.filter(
+            (item) => item.nome.length > 4
+        );
 
-  remover = (key) => {
-    let vetorContato = this.state.contatoList;
+        this.setState({ contatoList: novoContato });
+    };
 
-    vetorContato.splice(key, 1);
+    remover = (key) => {
+        let vetorContato = this.state.contatoList;
 
-    alert("removendo..." + key);
+        vetorContato.splice(key, 1);
 
-    this.forceUpdate();
-  };
+        alert("removendo..." + key);
 
-  render() {
-    return (
-      <>
-        <Button mode="contained" color="red" onPress={() => this.filtrar()}>
-          <Icon name="filter"></Icon> Filtrar
+        this.forceUpdate();
+    };
+
+    render() {
+        return (
+            <>
+                <Button mode="contained" color="red" onPress={() => this.filtrar()}>
+                    <Icon name="filter"></Icon> Filtrar
         </Button>
 
-        <Button mode="contained" color="green" onPress={() => this.getData()}>
-          <Icon name="retweet"></Icon> Atualizar
+                <Button mode="contained" color="green" onPress={() => this.getData()}>
+                    <Icon name="retweet"></Icon> Atualizar
         </Button>
-        <Card>
-          <Card.Content>
-            <List.Section>
-              <List.Subheader>Listagem Contatos</List.Subheader>
+                <Card>
+                    <Card.Content>
+                        <List.Section>
+                            <List.Subheader>Listagem Contatos</List.Subheader>
 
-              {this.state.contatoList?.map((item, i) => (
-                <>
-                  <TouchableOpacity
-                    onLongPress={() => this.remover(i)}
-                    onPress={() => {
-                      let objContato = {
-                        id: i,
-                        nome: item.nome,
-                        telefone: item.telefone,
-                        dataNascimento: item.dataNascimento,
-                      };
+                            {this.state.contatoList?.map((item, i) => (
+                                <>
+                                    <TouchableOpacity
+                                        onLongPress={() => this.remover(i)}
+                                        onPress={() => {
+                                            let objContato = {
+                                                id: i,
+                                                nome: item.nome,
+                                                telefone: item.telefone,
+                                                dataNascimento: item.dataNascimento,
+                                            };
 
-                      this.props.navigation.navigate("Formulário Contato", {
-                        contato: objContato,
-                        contatos: this.state.contatoList,
-                      });
-                    }}
-                  >
-                    <Divider />
-                    <Paragraph>{i + 1}</Paragraph>
-                    <Title>{item.nome}</Title>
-                    <Paragraph>{item.telefone}</Paragraph>
-                    <Paragraph>{item.dataNascimento}</Paragraph>
-                    <Divider />
-                  </TouchableOpacity>
-                </>
-              ))}
-            </List.Section>
-          </Card.Content>
-        </Card>
-        <FAB
-          style={styles.fab}
-          small
-          icon="plus"
-          onPress={() =>
-            this.props.navigation.navigate("Formulário Contato", {
-              key: "",
-              nome: "Jackson",
-              contato: "",
-              contatos: this.state.contatoList,
-            })
-          }
-        />
-      </>
-    );
-  }
+                                            this.props.navigation.navigate("Formulário Contato", {
+                                                contato: objContato,
+                                                contatos: this.state.contatoList,
+                                            });
+                                        }}
+                                    >
+                                        <Divider />
+                                        <Paragraph>{i + 1}</Paragraph>
+                                        <Title>{item.nome}</Title>
+                                        <Paragraph>{item.telefone}</Paragraph>
+                                        <Paragraph>{item.dataNascimento}</Paragraph>
+                                        <Divider />
+                                    </TouchableOpacity>
+                                </>
+                            ))}
+                        </List.Section>
+                    </Card.Content>
+                </Card>
+                <FAB
+                    style={styles.fab}
+                    small
+                    icon="plus"
+                    onPress={() =>
+                        this.props.navigation.navigate("Formulário Contato", {
+                            key: "",
+                            nome: "Jackson",
+                            contato: "",
+                            contatos: this.state.contatoList,
+                        })
+                    }
+                />
+            </>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "orange",
-  },
+    fab: {
+        position: "absolute",
+        margin: 16,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "orange",
+    },
 });
 
-/* 
+/*
 //exemplu usando função
 function ContatoForm() {
   const [nome, setNum01] = useState(0);
