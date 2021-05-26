@@ -12,6 +12,7 @@ import {
     FAB,
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
+import firebase from "../components/firebase";
 
 export default class ContatoList extends React.Component {
     constructor(props) {
@@ -24,15 +25,30 @@ export default class ContatoList extends React.Component {
         await this.getData();
     }
     getData = async () => {
-        const { route } = this.props;
-        if (route.params) {
-            const { contatos } = route.params;
 
-            await this.setState({ contatoList: contatos });
-        }
+        var ref = firebase.database().ref("usuario");
+        var vetorTemp = [];
+
+        await ref.on("value", function (snapshot) {
+            if (snapshot) {
+                snapshot.forEach((child) => {
+                    vetorTemp.push({
+                        nome: child.val().nome,
+                        telefone: child.val().telefone,
+                        dataNascimento: child.val().dataNascimentos
+                    });
+                    console.log(vetorTemp);
+                })
+
+            }
+        }, (error) => {
+            console.log("Error: " + error.code);
+        });
+        this.setState({ contatoList: vetorTemp });
+
         this.forceUpdate();
-        route.params = null;
         console.log(this.state.contatoList);
+        return vetorTemp;
     };
 
     filtrar = () => {
