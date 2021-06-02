@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, Alert } from "react-native";
 import {
     Card,
     Divider,
@@ -64,13 +64,15 @@ export default class ContatoList extends React.Component {
     };
 
     remover = (key) => {
-        let vetorContato = this.state.contatoList;
+        var usuarioRef = firebase.database().ref("usuario/" + key);
 
-        vetorContato.splice(key, 1);
+        usuarioRef.remove().then(() => {
+            console.log("Removido" + key);
+        }).catch((error) => {
+            console.log(error);
+        });
 
-        alert("removendo..." + key);
-
-        this.forceUpdate();
+        this.getData();
     };
 
     render() {
@@ -91,7 +93,21 @@ export default class ContatoList extends React.Component {
                             {this.state.contatoList?.map((item, i) => (
                                 <>
                                     <TouchableOpacity
-                                        onLongPress={() => this.remover(i)}
+                                        onLongPress={() => {
+                                            Alert.alert(
+                                                "Remover Usuário",
+                                                "Deseja realmente remover o registro?",
+                                                [
+                                                    {
+                                                        text: "Cancel",
+                                                        onPress: () => console.log("Cancel Pressed"),
+                                                        style: "cancel"
+                                                    },
+                                                    { text: "OK", onPress: () => this.remover(item.id) }
+                                                ]
+                                            );
+                                        }
+                                        }
                                         onPress={() => {
                                             let objContato = {
                                                 id: item.id,
