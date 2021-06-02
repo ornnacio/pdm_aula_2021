@@ -22,7 +22,11 @@ export default class ContatoList extends React.Component {
         };
     }
     async componentDidMount() {
+
         await this.getData();
+        this.focusListener = this.props.navigation.addListener("focus", () => {
+            this.getData();
+        });
     }
     getData = async () => {
 
@@ -33,9 +37,10 @@ export default class ContatoList extends React.Component {
             if (snapshot) {
                 snapshot.forEach((child) => {
                     vetorTemp.push({
+                        id: child.key,
                         nome: child.val().nome,
                         telefone: child.val().telefone,
-                        dataNascimento: child.val().dataNascimentos
+                        dataNascimento: child.val().dataNascimento
                     });
                     console.log(vetorTemp);
                 })
@@ -46,9 +51,8 @@ export default class ContatoList extends React.Component {
         });
         this.setState({ contatoList: vetorTemp });
 
-        this.forceUpdate();
+
         console.log(this.state.contatoList);
-        return vetorTemp;
     };
 
     filtrar = () => {
@@ -90,15 +94,14 @@ export default class ContatoList extends React.Component {
                                         onLongPress={() => this.remover(i)}
                                         onPress={() => {
                                             let objContato = {
-                                                id: i,
+                                                id: item.id,
                                                 nome: item.nome,
                                                 telefone: item.telefone,
                                                 dataNascimento: item.dataNascimento,
                                             };
 
                                             this.props.navigation.navigate("Formulário Contato", {
-                                                contato: objContato,
-                                                contatos: this.state.contatoList,
+                                                contato: objContato
                                             });
                                         }}
                                     >

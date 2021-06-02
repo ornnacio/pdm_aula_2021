@@ -20,7 +20,6 @@ export default class ContatoForm extends React.Component {
             nome: null,
             telefone: null,
             dataNascimento: null,
-            contatoList: [],
         };
     }
     async componentDidMount() {
@@ -35,29 +34,34 @@ export default class ContatoForm extends React.Component {
             dataNascimento: this.state.dataNascimento,
         };
 
-        // let vetorContato = [...this.state.contatoList];
-
         if (contato.id != null) {
-            vetorContato[contato.id].nome = this.state.nome;
-            vetorContato[contato.id].telefone = this.state.telefone;
-            vetorContato[contato.id].dataNascimento = this.state.dataNascimento;
 
-            await this.setState({ contatoList: vetorContato });
+            var usuarioRef = firebase.database().ref("usuario/" + contato.id);
+
+            usuarioRef.update({
+                nome: contato.nome,
+                telefone: contato.telefone,
+                dataNascimento: contato.dataNascimento,
+            }).then(() => {
+                console.log("Atualizado");
+            }).catch((error) => {
+                console.log(error);
+            });
+
         } else {
-            /* let vetTemp = [...vetorContato, contato];
-      
-            await this.setState({
-              contatoList: vetTemp,
-            }); */
+
             var usuarioRef = firebase.database().ref("usuario");
 
             usuarioRef.push({
                 nome: contato.nome,
                 telefone: contato.telefone,
                 dataNascimento: contato.dataNascimento,
+            }).then(() => {
+                console.log("inserido");
+            }).catch((error) => {
+                console.log(error);
             });
         }
-
 
         alert("teste");
         console.log(usuarioRef);
@@ -67,31 +71,27 @@ export default class ContatoForm extends React.Component {
             telefone: null,
             dataNascimento: null,
         });
-        await console.log(this.state.contatoList);
+
+        this.props.navigation.navigate("Listagem de Contatos");
     };
 
     carrregarDados() {
         let { route } = this.props;
 
         if (route.params) {
-            let { contato, contatos } = route.params;
+            let { contato } = route.params;
 
             if (contato.id != null) {
-                contatos.map((item, i) => {
-                    if (i === contato.id) {
-                        this.setState({
-                            id: contato.id,
-                            nome: contato.nome,
-                            telefone: contato.telefone,
-                            dataNascimento: contato.dataNascimento,
-                        });
-                    }
+                this.setState({
+                    id: contato.id,
+                    nome: contato.nome,
+                    telefone: contato.telefone,
+                    dataNascimento: contato.dataNascimento,
                 });
             }
-            this.setState({ contatoList: contatos });
-            console.log(contatos);
-            console.log("teste rotas");
         }
+        console.log(contato);
+        console.log("teste rotas");
     }
 
     render() {
