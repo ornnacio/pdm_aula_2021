@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, TouchableOpacity, Alert, View, Animated } from "react-native";
 import {
     Card,
     Divider,
@@ -13,6 +13,7 @@ import {
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import firebase from "../components/firebase";
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 export default class ContatoList extends React.Component {
     constructor(props) {
@@ -96,6 +97,87 @@ export default class ContatoList extends React.Component {
 
     }
 
+    leftActions = (progress, dragX) => {
+        const scale = dragX.interpolate({
+            inputRange: [0, 100],
+            outputRange: [0, 1],
+            extrapolate: 'clamp'
+        });
+        return (
+            <View
+                style={{ flex: 1, backgroundColor: 'blue', justifyContent: 'center' }}>
+                <Animated.Text
+                    style={{
+                        color: 'white',
+                        paddingHorizontal: 10,
+                        fontWeight: '600',
+                        transform: [{ scale }]
+                    }}>
+                    Ação Esquerda
+        </Animated.Text>
+            </View>
+        )
+    }
+
+    rightActions = (progress, dragX, objContato) => {
+        const scale = dragX.interpolate({
+            inputRange: [-100, 0],
+            outputRange: [0.7, 0]
+        })
+        return (
+            <>
+                <TouchableOpacity
+                    onPress={() => {
+                        Alert.alert(
+                            "Remover Usuário",
+                            "Deseja realmente remover o registro?",
+                            [
+                                {
+                                    text: "Cancel",
+                                    onPress: () => console.log("Cancel Pressed"),
+                                    style: "cancel"
+                                },
+                                { text: "OK", onPress: () => this.remover(objContato.id) }
+                            ]
+                        );
+                    }
+                    }
+                >
+                    <View style={{ flex: 1, backgroundColor: 'red', justifyContent: 'center' }}>
+                        <Animated.Text
+                            style={{
+                                color: 'white',
+                                paddingHorizontal: 10,
+                                fontWeight: '600',
+                                transform: [{ scale }]
+                            }}>
+                            Deletar
+                    </Animated.Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.navigation.navigate("Formulário Contato", {
+                            contato: objContato
+                        });
+                    }}
+                >
+                    <View style={{ flex: 1, backgroundColor: 'green', justifyContent: 'center' }}>
+                        <Animated.Text
+                            style={{
+                                color: 'white',
+                                paddingHorizontal: 10,
+                                fontWeight: '600',
+                                transform: [{ scale }]
+                            }}>
+                            Editar
+                    </Animated.Text>
+                    </View>
+                </TouchableOpacity>
+            </>
+        )
+    }
+
     render() {
         return (
             <>
@@ -120,23 +202,8 @@ export default class ContatoList extends React.Component {
 
                             {this.state.contatoList?.map((item, i) => (
                                 <>
-                                    <TouchableOpacity
-                                        onLongPress={() => {
-                                            Alert.alert(
-                                                "Remover Usuário",
-                                                "Deseja realmente remover o registro?",
-                                                [
-                                                    {
-                                                        text: "Cancel",
-                                                        onPress: () => console.log("Cancel Pressed"),
-                                                        style: "cancel"
-                                                    },
-                                                    { text: "OK", onPress: () => this.remover(item.id) }
-                                                ]
-                                            );
-                                        }
-                                        }
-                                        onPress={() => {
+                                    <Swipeable renderLeftActions={(progress, dragX) => this.leftActions(progress, dragX, item.id)}
+                                        renderRightActions={(progress, dragX) => {
                                             let objContato = {
                                                 id: item.id,
                                                 nome: item.nome,
@@ -144,18 +211,15 @@ export default class ContatoList extends React.Component {
                                                 dataNascimento: item.dataNascimento,
                                             };
 
-                                            this.props.navigation.navigate("Formulário Contato", {
-                                                contato: objContato
-                                            });
-                                        }}
-                                    >
+                                            return this.rightActions(progress, dragX, objContato)
+                                        }}>
                                         <Divider />
                                         <Paragraph>{i + 1}</Paragraph>
                                         <Title>{item.nome}</Title>
                                         <Paragraph>{item.telefone}</Paragraph>
                                         <Paragraph>{item.dataNascimento}</Paragraph>
                                         <Divider />
-                                    </TouchableOpacity>
+                                    </Swipeable>
                                 </>
                             ))}
                         </List.Section>
