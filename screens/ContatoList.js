@@ -18,6 +18,7 @@ export default class ContatoList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            search: null,
             contatoList: [],
         };
     }
@@ -75,16 +76,43 @@ export default class ContatoList extends React.Component {
         this.getData();
     };
 
+    pesquisar = async (text) => {
+        if (text != '') {
+            const newArray = this.state.contatoList.filter((item) => {
+                const itemDado = item.nome ? item.nome.toUpperCase() : ''.toUpperCase();
+                //console.log(text);
+                const textDado = text.toUpperCase();
+
+                return itemDado.indexOf(textDado) > -1;
+            });
+            this.setState({
+                contatoList: newArray,
+                search: text,
+            });
+        } else {
+            await this.getData();
+            this.setState({ search: null });
+        }
+
+    }
+
     render() {
         return (
             <>
-                <Button mode="contained" color="red" onPress={() => this.filtrar()}>
+
+
+                {/*              <Button mode="contained" color="red" onPress={() => this.filtrar()}>
                     <Icon name="filter"></Icon> Filtrar
         </Button>
 
                 <Button mode="contained" color="green" onPress={() => this.getData()}>
                     <Icon name="retweet"></Icon> Atualizar
-        </Button>
+        </Button> */}
+                <TextInput
+                    label="Pesquisar"
+                    value={this.state.search}
+                    onChangeText={(text) => this.pesquisar(text)}
+                />
                 <Card>
                     <Card.Content>
                         <List.Section>
