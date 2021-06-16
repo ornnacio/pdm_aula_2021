@@ -7,7 +7,7 @@ import {
     Title,
     Paragraph,
     Button,
-    List,
+    List, Snackbar
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import firebase from "../components/firebase";
@@ -22,39 +22,59 @@ export default class RegistrarUsuarioForm extends React.Component {
             telefone: null,
             email: null,
             password: null,
+            visible: false,
+            msg: ""
         };
     }
 
     registrar = async () => {
         const { nome, telefone, email, cpf, password } = this.state;
+        let msg = "";
+        if (nome != null && telefone != null && cpf != null && email != null && password != null) {
+            await firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(async (userCredential) => {
+                    // Signed in
+                    var usuarioRef = firebase.database().ref("usuario");
+                    await usuarioRef.push({
+                        nome: nome,
+                        telefone: telefone,
+                        cpf: cpf,
+                        email: email,
+                        uid: userCredential.user.uid,
+                    }).then(() => {
+                        console.log("inserido");
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
 
-        await firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(async (userCredential) => {
-                // Signed in
-                var usuarioRef = firebase.database().ref("usuario");
-                await usuarioRef.push({
-                    nome: nome,
-                    telefone: telefone,
-                    cpf: cpf,
-                    email: email,
-                    uid: userCredential.user.uid,
-                }).then(() => {
-                    console.log("inserido");
-                }).catch((error) => {
-                    console.log(error);
+                    if (errorCode == "auth/invalid-email") {
+                        msg = "Email ou senha invalido!";
+                    } else if (errorCode == "auth/email-already-exists") {
+                        msg = "Email já esta cadastrado!";
+                    } else if (errorCode == "auth/email-already-in-use") {
+                        msg = "Email já esta cadastrado!";
+                    } else {
+                        msg = errorMessage;
+                    }
+
+                    this.setState({ msg: msg, visible: true })
+                    console.log(errorCode);
+                    console.log(errorMessage);
+                    //auth/email-already-exists
                 });
-            })
-            .catch((error) => {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log(errorCode);
-                console.log(errorMessage);
-            });
-
+        } else {
+            this.setState({ msg: "Preencha todos os campos do formulário!", visible: true })
+        }
 
         // this.props.navigation.navigate("Listagem de Contatos");
     };
+    onToggleSnackBar = () => { this.setState(!this.state.visible) };
 
+    onDismissSnackBar = () => this.setState({ visible: false });
 
     render() {
         return (
@@ -97,13 +117,22 @@ export default class RegistrarUsuarioForm extends React.Component {
                     mode="contained"
                     color="green"
                     onPress={() =>
-                        this.props.navigation.navigate("Listagem de Contatos", {
-                            //contatos: this.state.contatoList,
-                        })
+                        this.props.navigation.goBack()
                     }
                 >
                     <Icon name="arrow-left"></Icon> Voltar
                 </Button>
+                <Snackbar
+                    visible={this.state.visible}
+                    onDismiss={() => this.onDismissSnackBar()}
+                    action={{
+                        label: 'Ok',
+                        onPress: () => {
+                            // Do something
+                        },
+                    }}>
+                    {this.state.msg}
+                </Snackbar>
             </>
         );
     }
