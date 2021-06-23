@@ -1,4 +1,5 @@
 import * as React from "react";
+import { View } from "react-native";
 import {
     Card,
     Divider,
@@ -7,11 +8,10 @@ import {
     Title,
     Paragraph,
     Button,
-    List, Snackbar
+    List, Snackbar, Colors
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import firebase from "../components/firebase";
-
 export default class LoginForm extends React.Component {
     constructor(props) {
         super(props);
@@ -20,18 +20,24 @@ export default class LoginForm extends React.Component {
             password: null,
             visible: false,
             msg: "",
+            loading: false,
         };
     }
 
     logar = async () => {
         const { email, password } = this.state;
         let msg = "";
+
+        this.setState({ loading: true });
+
         if (email != null && password != null) {
             await firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(async () => {
                     // Signed in
                     console.log("Login - OK");
                     this.props.navigation.navigate("Início");
+
+                    this.setState({ loading: false });
                 })
                 .catch((error) => {
                     var errorCode = error.code;
@@ -59,13 +65,13 @@ export default class LoginForm extends React.Component {
                         msg = errorMessage;
                     }
 
-                    this.setState({ msg: msg, visible: true })
+                    this.setState({ msg: msg, visible: true, loading: false })
                     console.log(errorCode);
                     console.log(errorMessage);
                     //
                 });
         } else {
-            this.setState({ msg: "Email ou senha vazios!", visible: true })
+            this.setState({ msg: "Email ou senha vazios!", visible: true, loading: false })
         }
 
     };
@@ -74,6 +80,16 @@ export default class LoginForm extends React.Component {
     onDismissSnackBar = () => this.setState({ visible: false });
 
     render() {
+
+        if (this.state.loading) {
+            return (<View
+                style={{ flex: 1, justifyContent: "center", alignSelf: "center" }}>
+                <Button mode="contained" loading={true} color={Colors.blue800}>
+                    Carredando
+                </Button>
+            </View>)
+        }
+
         return (
             <>
                 <Title style={{ color: "red", textAlign: "center" }}>
