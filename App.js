@@ -12,6 +12,7 @@ import InicioScreens from "./screens/InicioScreens";
 import ContatoForm from "./screens/ContatoForm";
 import ContatoList from "./screens/ContatoList";
 import RegistrarUsuarioForm from "./screens/RegistrarUsuarioForm";
+import LoginForm from "./screens/LoginForm";
 
 const Stack = createStackNavigator();
 
@@ -73,7 +74,7 @@ export default function App() {
         <PaperProvider theme={theme}>
             <NavigationContainer>
                 <Stack.Navigator
-                    initialRouteName="Início"
+                    initialRouteName="Login"
                     screenOptions={{
                         header: (props) => <CustomNavigationBar {...props} />,
                     }}
@@ -81,6 +82,7 @@ export default function App() {
                     <Stack.Screen name="Início" component={InicioScreens} />
                     <Stack.Screen name="Formulário Contato" component={ContatoForm} />
                     <Stack.Screen name="Registrar Usuário" component={RegistrarUsuarioForm} />
+                    <Stack.Screen name="Login" component={LoginForm} />
                     <Stack.Screen name="Listagem de Contatos" component={ContatoList} />
                 </Stack.Navigator>
             </NavigationContainer>
