@@ -19,14 +19,13 @@ export default class LoginForm extends React.Component {
             email: null,
             password: null,
             visible: false,
-            msg: ""
+            msg: "",
         };
     }
 
     logar = async () => {
         const { email, password } = this.state;
         let msg = "";
-        console.log(email);
         if (email != null && password != null) {
             await firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(async () => {
@@ -39,11 +38,23 @@ export default class LoginForm extends React.Component {
                     var errorMessage = error.message;
 
                     if (errorCode == "auth/invalid-email") {
-                        msg = "Email ou senha invalido!";
+                        msg = "Email esta fora do formato padrão ou senha errada!";
+
                     } else if (errorCode == "auth/email-already-exists") {
                         msg = "Email já esta cadastrado!";
+
+                    } else if (errorCode == "auth/wrong-password") {
+                        msg = "Senha invalida, tente novamente!";
+
+                    } else if (errorCode == "auth/user-not-found") {
+                        msg = "Usuário não encontrado!";
+
                     } else if (errorCode == "auth/email-already-in-use") {
                         msg = "Email já esta cadastrado!";
+
+                    } else if (errorCode == "auth/too-many-requests") {
+                        msg = "O acesso a esta conta foi temporariamente desativado devido a muitas tentativas de login com falha. Você pode imediatamente restaurá-lo redefinindo sua senha ou você pode tentar novamente mais tarde!";
+
                     } else {
                         msg = errorMessage;
                     }
@@ -51,7 +62,7 @@ export default class LoginForm extends React.Component {
                     this.setState({ msg: msg, visible: true })
                     console.log(errorCode);
                     console.log(errorMessage);
-                    //auth/email-already-exists
+                    //
                 });
         } else {
             this.setState({ msg: "Email ou senha vazios!", visible: true })

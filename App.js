@@ -31,12 +31,12 @@ function CustomNavigationBar({ navigation, previous }) {
     const [visible, setVisible] = React.useState(false);
     const openMenu = () => setVisible(true);
     const closeMenu = () => setVisible(false);
-
+    console.log(visible);
     return (
         <Appbar.Header>
             {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
             <Appbar.Content title={route.name} />
-            {!previous ? (
+            {previous && route.name != "Registrar Usuário" ? (
                 <Menu
                     visible={visible}
                     onDismiss={closeMenu}
