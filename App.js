@@ -15,6 +15,7 @@ import RegistrarUsuarioForm from "./screens/RegistrarUsuarioForm";
 import LoginForm from "./screens/LoginForm";
 import MapaScreens from "./screens/MapaScreens";
 import CameraScreen from "./screens/CameraScreen";
+import LocalizacaoScreen from "./screens/LocalizacaoScreen";
 
 const Stack = createStackNavigator();
 
@@ -88,6 +89,7 @@ export default function App() {
                     <Stack.Screen name="Listagem de Contatos" component={ContatoList} />
                     <Stack.Screen name="Mapa" component={MapaScreens} />
                     <Stack.Screen name="Camera" component={CameraScreen} />
+                    <Stack.Screen name="Localização" component={LocalizacaoScreen} />
 
                 </Stack.Navigator>
             </NavigationContainer>

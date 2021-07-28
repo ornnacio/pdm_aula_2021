@@ -82,6 +82,14 @@ export default function App(props) {
             >
                 <Icon name="camera" color="white" size={24} /> Câmera
             </Button>
+            <Button
+                mode="contained"
+                onPress={() =>
+                    props.navigation.navigate("Localização")
+                }
+            >
+                <Icon name="map-pin" color="white" size={24} /> Localização
+            </Button>
         </>
     );
 }
