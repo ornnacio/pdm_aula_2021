@@ -16,6 +16,8 @@ import LoginForm from "./screens/LoginForm";
 import MapaScreens from "./screens/MapaScreens";
 import CameraScreen from "./screens/CameraScreen";
 import LocalizacaoScreen from "./screens/LocalizacaoScreen";
+import VideoScreen from "./screens/VideoScreen";
+
 
 const Stack = createStackNavigator();
 
@@ -90,6 +92,7 @@ export default function App() {
                     <Stack.Screen name="Mapa" component={MapaScreens} />
                     <Stack.Screen name="Camera" component={CameraScreen} />
                     <Stack.Screen name="Localização" component={LocalizacaoScreen} />
+                    <Stack.Screen name="Video" component={VideoScreen} />
 
                 </Stack.Navigator>
             </NavigationContainer>

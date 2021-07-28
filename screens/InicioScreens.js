@@ -90,6 +90,14 @@ export default function App(props) {
             >
                 <Icon name="map-pin" color="white" size={24} /> Localização
             </Button>
+            <Button
+                mode="contained"
+                onPress={() =>
+                    props.navigation.navigate("Video")
+                }
+            >
+                <Icon name="play" color="white" size={24} /> Video
+            </Button>
         </>
     );
 }
