@@ -78,7 +78,7 @@ function CustomNavigationBar({ navigation, previous }) {
 
 export default function App() {
 	
-	const [isReady, setIsReady] = React.useState(true);
+	const [isReady, setIsReady] = React.useState(false);
 	
 	useEffect(() => {
 		try{

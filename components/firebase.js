@@ -2,12 +2,12 @@ import firebase from "firebase";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAAPjTWrGjwv8hCYC3XE4tU6NwwlGVNuyQ",
-  authDomain: "pdm-aula-2021-e8589.firebaseapp.com",
-  projectId: "pdm-aula-2021-e8589",
-  storageBucket: "pdm-aula-2021-e8589.appspot.com",
-  messagingSenderId: "129683323901",
-  appId: "1:129683323901:web:618cd8b28c96f9cf9c7794",
+  apiKey: "AIzaSyAMTSiv5DDRG79qp8zh1HJr3G0siuw7Pzg",
+  authDomain: "exercicios-pdm.firebaseapp.com",
+  projectId: "exercicios-pdm",
+  storageBucket: "exercicios-pdm.appspot.com",
+  messagingSenderId: "110892933474",
+  appId: "1:110892933474:web:24802a41636c077e330c3b"
 };
 
 if (!firebase.apps.length) {
